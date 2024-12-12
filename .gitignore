@@ -1,0 +1,13 @@
+# Compiled files
+*.o
+*.out
+custom_deleter
+bit_flip
+
+# IDE specific files
+.vscode/
+.idea/
+*.swp
+
+# OS specific files
+.DS_Store
