@@ -1,6 +1,7 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include <type_traits>
 
 // Class representing a user database
 class UserDatabase {
@@ -37,6 +38,27 @@ public:
     }
 };
 
+// Generic printer class that handles different types at compile-time
+template<typename T>
+class SmartPrinter {
+public:
+    void print(const T& value) {
+        if constexpr (std::is_arithmetic_v<T>) {
+            std::cout << "Numeric value: " << value << std::endl;
+            // Compile-time check for floating point
+            if constexpr (std::is_floating_point_v<T>) {
+                std::cout << "With precision: " << value * 1.0 << std::endl;
+            }
+        } 
+        else if constexpr (std::is_same_v<T, std::string>) {
+            std::cout << "String value: \"" << value << "\"" << std::endl;
+        }
+        else {
+            std::cout << "Unsupported type" << std::endl;
+        }
+    }
+};
+
 int main() {
     UserDatabase db;
     
@@ -47,6 +69,14 @@ int main() {
     // Test with non-existing user
     db.findUserModern(5);
     db.findUserLegacy(5);
-    
+
+    SmartPrinter<int> intPrinter;
+    SmartPrinter<double> doublePrinter;
+    SmartPrinter<std::string> stringPrinter;
+
+    intPrinter.print(42);
+    doublePrinter.print(3.14159);
+    stringPrinter.print("Hello, constexpr if!");
+
     return 0;
 }
