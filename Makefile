@@ -2,6 +2,9 @@ CC = gcc
 CFLAGS = -Wall -Wextra -std=c99 -g
 LDFLAGS = -lm
 
+# Directory for executables
+BIN_DIR = bin
+
 # List of all source files
 SRCS = addition.c test_addition.c Palindrome.c StringRevers.c array_rotation.c bit_flip.c \
        memory_example.c processor_simulation.c simple_array_rotation.c swap_even_numbers.c test.c
@@ -39,12 +42,21 @@ run-%: %
 clean:
 	@echo "Cleaning up executables..."
 	@rm -f $(EXECS)
+	@rm -f $(BIN_DIR)/*
 	@echo "Clean complete"
 
-# Create a directory for object files if needed
-.PHONY: objdir
-objdir:
-	@mkdir -p obj
+# Create the bin directory if it doesn't exist
+$(BIN_DIR):
+	@mkdir -p $(BIN_DIR)
+
+# Copy all executables to bin directory
+install: all $(BIN_DIR)
+	@echo "Copying executables to $(BIN_DIR)..."
+	@for exec in $(EXECS); do \
+		cp $$exec $(BIN_DIR)/$$exec 2>/dev/null || true; \
+	done
+	@echo "All executables copied to $(BIN_DIR)"
+	@ls -la $(BIN_DIR)
 
 # List all available targets
 help:
@@ -54,6 +66,7 @@ help:
 	@echo "  clean         - Remove all executables"
 	@echo "  test          - Run test_addition"
 	@echo "  run-PROGRAM   - Build and run a specific program (e.g., make run-addition)"
+	@echo "  install       - Copy all executables to $(BIN_DIR) directory"
 	@echo "  help          - Display this help message"
 	@echo ""
 	@echo "Individual executables:"
