@@ -5,6 +5,14 @@ custom_deleter
 bit_flip
 addition
 test_addition
+Palindrome
+StringRevers
+array_rotation
+memory_example
+processor_simulation
+simple_array_rotation
+swap_even_numbers
+test
 
 # IDE specific files
 .vscode/
