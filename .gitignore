@@ -1,6 +1,12 @@
 # Compiled files
 *.o
 *.out
+*.a
+*.so
+*.dll
+*.dylib
+*.exe
+*.obj
 custom_deleter
 bit_flip
 addition
@@ -14,8 +20,39 @@ simple_array_rotation
 swap_even_numbers
 test
 
+# C++ specific
+advanced_solid_example
+array_rotation
+casting_examples
+constexpr_optimization
+copy_constructor_example
+custom_deleter
+custom_memory_manager
+data_container_example
+database_singleton
+document_factory
+file_processor
+if_init_example
+logger_singleton
+non_virtual_access
+optimized_derived_access
+packet_handler_example
+parallel_sum_improved
+payment_factory
+shared_ptr_demo
+simple_memory_manager
+solid_notification_example
+solid_payment_example
+stock_observer
+structured_bindings_example
+switch_init_example
+unique_ptr_demo
+vector_capacity_demo
+weather_observer
+
 # Debug symbol files
 *.dSYM/
+*.pdb
 
 # Bin directory
 bin/
