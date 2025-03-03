@@ -3,6 +3,8 @@
 *.out
 custom_deleter
 bit_flip
+addition
+test_addition
 
 # IDE specific files
 .vscode/
