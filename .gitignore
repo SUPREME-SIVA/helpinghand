@@ -14,6 +14,9 @@ simple_array_rotation
 swap_even_numbers
 test
 
+# Debug symbol files
+*.dSYM/
+
 # Bin directory
 bin/
 
