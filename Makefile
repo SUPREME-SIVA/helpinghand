@@ -8,6 +8,7 @@ LDFLAGS = -lm
 BIN_DIR = bin
 TESTS_DIR = tests
 EXAMPLES_DIR = examples
+DESIGN_PATTERNS_DIR = design_patterns
 
 # List of all C source files
 C_SRCS = addition.c Palindrome.c StringRevers.c array_rotation.c bit_flip.c \
@@ -36,12 +37,17 @@ CXX_EXAMPLE_SRCS = $(EXAMPLES_DIR)/vector_basics.cpp $(EXAMPLES_DIR)/vector_cust
        $(EXAMPLES_DIR)/vector_advanced.cpp $(EXAMPLES_DIR)/list_basics.cpp \
        $(EXAMPLES_DIR)/list_lru_cache.cpp $(EXAMPLES_DIR)/list_priority_task_manager.cpp
 
+# List of all C++ design pattern files
+CXX_DESIGN_PATTERN_SRCS = $(DESIGN_PATTERNS_DIR)/thread_safe_singleton.cpp \
+       $(DESIGN_PATTERNS_DIR)/singleton_interview_guide.cpp
+
 # Generate executable names from source files (without extensions)
 C_EXECS = $(C_SRCS:.c=)
 CXX_EXECS = $(CXX_SRCS:.cpp=)
 C_TEST_EXECS = $(notdir $(C_TEST_SRCS:.c=))
 CXX_TEST_EXECS = $(notdir $(CXX_TEST_SRCS:.cpp=))
 CXX_EXAMPLE_EXECS = $(notdir $(CXX_EXAMPLE_SRCS:.cpp=))
+CXX_DESIGN_PATTERN_EXECS = $(notdir $(CXX_DESIGN_PATTERN_SRCS:.cpp=))
 
 # All executables
 ALL_EXECS = $(C_EXECS) $(CXX_EXECS)
@@ -49,9 +55,10 @@ ALL_C_TEST_EXECS = $(addprefix $(TESTS_DIR)/, $(C_TEST_EXECS))
 ALL_CXX_TEST_EXECS = $(addprefix $(TESTS_DIR)/, $(CXX_TEST_EXECS))
 ALL_TEST_EXECS = $(ALL_C_TEST_EXECS) $(ALL_CXX_TEST_EXECS)
 ALL_CXX_EXAMPLE_EXECS = $(addprefix $(EXAMPLES_DIR)/, $(CXX_EXAMPLE_EXECS))
+ALL_CXX_DESIGN_PATTERN_EXECS = $(addprefix $(DESIGN_PATTERNS_DIR)/, $(CXX_DESIGN_PATTERN_EXECS))
 
 # Default target to build all executables
-all: c-execs cxx-execs examples
+all: c-execs cxx-execs examples design-patterns
 
 # Build all C executables
 c-execs: $(C_EXECS)
@@ -64,6 +71,9 @@ examples: cxx-examples
 
 # Build all C++ example executables
 cxx-examples: $(ALL_CXX_EXAMPLE_EXECS)
+
+# Build all design pattern executables
+design-patterns: $(ALL_CXX_DESIGN_PATTERN_EXECS)
 
 # Build all test executables
 tests: c-tests cxx-tests
@@ -102,6 +112,12 @@ $(TESTS_DIR)/%: $(TESTS_DIR)/%.cpp
 $(EXAMPLES_DIR)/%: $(EXAMPLES_DIR)/%.cpp
 	@echo "Building C++ example: $@..."
 	@$(CXX) $(CXXFLAGS) -o $@ $< $(LDFLAGS)
+	@echo "Done building $@"
+
+# Generic rule for building C++ design pattern executables
+$(DESIGN_PATTERNS_DIR)/%: $(DESIGN_PATTERNS_DIR)/%.cpp
+	@echo "Building C++ design pattern: $@..."
+	@$(CXX) $(CXXFLAGS) -pthread -o $@ $< $(LDFLAGS)
 	@echo "Done building $@"
 
 # Run all tests
@@ -144,6 +160,16 @@ run-examples: examples
 	done
 	@echo "All examples completed"
 
+# Run all design patterns
+run-design-patterns: design-patterns
+	@echo "Running all design patterns..."
+	@for pattern in $(ALL_CXX_DESIGN_PATTERN_EXECS); do \
+		echo "=== Running $$pattern ==="; \
+		./$$pattern; \
+		echo ""; \
+	done
+	@echo "All design patterns completed"
+
 # Run a specific test
 run-test-%: $(TESTS_DIR)/%
 	@echo "Running test $*..."
@@ -153,6 +179,11 @@ run-test-%: $(TESTS_DIR)/%
 run-example-%: $(EXAMPLES_DIR)/%
 	@echo "Running example $*..."
 	@$(EXAMPLES_DIR)/$*
+
+# Run a specific design pattern
+run-design-pattern-%: $(DESIGN_PATTERNS_DIR)/%
+	@echo "Running design pattern $*..."
+	@$(DESIGN_PATTERNS_DIR)/$*
 
 # Run a specific program
 run-%: %
@@ -165,6 +196,7 @@ clean:
 	@rm -f $(ALL_EXECS)
 	@rm -f $(ALL_TEST_EXECS)
 	@rm -f $(ALL_CXX_EXAMPLE_EXECS)
+	@rm -f $(ALL_CXX_DESIGN_PATTERN_EXECS)
 	@rm -f $(BIN_DIR)/*
 	@echo "Clean complete"
 
@@ -180,6 +212,10 @@ $(TESTS_DIR):
 $(EXAMPLES_DIR):
 	@mkdir -p $(EXAMPLES_DIR)
 
+# Create the design patterns directory if it doesn't exist
+$(DESIGN_PATTERNS_DIR):
+	@mkdir -p $(DESIGN_PATTERNS_DIR)
+
 # Copy all executables to bin directory
 install: all $(BIN_DIR)
 	@echo "Copying executables to $(BIN_DIR)..."
@@ -192,6 +228,14 @@ install: all $(BIN_DIR)
 		fi; \
 	done
 	@for exec in $(ALL_CXX_EXAMPLE_EXECS); do \
+		if [ -f $$exec ]; then \
+			cp $$exec $(BIN_DIR)/$$exec 2>/dev/null || true; \
+			echo "  - Copied: $$exec"; \
+		else \
+			echo "  - Skipped: $$exec (not found)"; \
+		fi; \
+	done
+	@for exec in $(ALL_CXX_DESIGN_PATTERN_EXECS); do \
 		if [ -f $$exec ]; then \
 			cp $$exec $(BIN_DIR)/$$exec 2>/dev/null || true; \
 			echo "  - Copied: $$exec"; \
@@ -217,8 +261,10 @@ help:
 	@echo "  run-c-tests   - Build and run C tests"
 	@echo "  run-cxx-tests - Build and run C++ tests"
 	@echo "  run-examples  - Build and run all examples"
+	@echo "  run-design-patterns - Build and run all design patterns"
 	@echo "  run-test-NAME - Build and run a specific test (e.g., make run-test-test_palindrome)"
 	@echo "  run-example-NAME - Build and run a specific example (e.g., make run-example-vector_basics)"
+	@echo "  run-design-pattern-NAME - Build and run a specific design pattern (e.g., make run-design-pattern-thread_safe_singleton)"
 	@echo "  clean         - Remove all executables"
 	@echo "  run-PROGRAM   - Build and run a specific program (e.g., make run-addition)"
 	@echo "  install       - Copy all executables to $(BIN_DIR) directory"
@@ -246,6 +292,11 @@ help:
 	@echo ""
 	@echo "C++ Example Executables ($(words $(CXX_EXAMPLE_EXECS))):"
 	@for exec in $(CXX_EXAMPLE_EXECS); do \
+		echo "  $$exec"; \
+	done
+	@echo ""
+	@echo "C++ Design Pattern Executables ($(words $(CXX_DESIGN_PATTERN_EXECS))):"
+	@for exec in $(CXX_DESIGN_PATTERN_EXECS); do \
 		echo "  $$exec"; \
 	done
 	@echo "============================================="

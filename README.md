@@ -90,6 +90,44 @@ g++ -std=c++11 examples/vector_basics.cpp -o examples/vector_basics
 ./examples/vector_basics
 ```
 
+## Design Patterns
+
+The repository includes a collection of modern C++ design pattern implementations in the `design_patterns/` directory:
+
+### Creational Patterns
+
+1. **Thread-Safe Singleton** (`thread_safe_singleton.cpp`)
+   - Implements the Singleton pattern with thread safety using std::mutex
+   - Uses unique_ptr for automatic memory management
+   - Implements double-checked locking pattern for performance
+   - Provides exception handling for multiple instance creation attempts
+   - Demonstrates RAII principles through smart pointers
+
+### How to Build and Run Design Patterns
+
+#### Using Make
+
+```bash
+# Build all design patterns
+make design-patterns
+
+# Run all design patterns
+make run-design-patterns
+
+# Build and run a specific design pattern
+make run-design-pattern-thread_safe_singleton
+```
+
+#### Manual Compilation
+
+```bash
+# Compile a specific design pattern
+g++ -std=c++17 -pthread design_patterns/thread_safe_singleton.cpp -o design_patterns/thread_safe_singleton
+
+# Run the design pattern
+./design_patterns/thread_safe_singleton
+```
+
 ## Testing
 
 The repository includes a comprehensive testing approach for C and C++ programs:

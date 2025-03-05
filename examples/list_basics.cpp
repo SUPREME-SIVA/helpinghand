@@ -168,9 +168,6 @@
 // Priority Task Manager: Illustrates using a list for a task management system where tasks need to be inserted, removed, and reprioritized efficiently at arbitrary positions.
 // When deciding between std::vector and std::list, consider the main operations your application will perform. If you need frequent random access and infrequent insertions/deletions, std::vector is likely better. If you need frequent insertions/deletions at arbitrary positions and don't need random access, std::list is a better choice.
 
-
-
-
 #include <iostream>
 #include <list>
 #include <string>

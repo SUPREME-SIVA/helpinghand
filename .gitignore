@@ -59,6 +59,10 @@ examples/list_basics
 examples/list_lru_cache
 examples/list_priority_task_manager
 
+# Design patterns directory binaries
+design_patterns/thread_safe_singleton
+design_patterns/singleton_interview_guide
+
 # Test directory binaries
 tests/test_addition
 tests/test_array_rotation
