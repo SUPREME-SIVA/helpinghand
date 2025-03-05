@@ -55,6 +55,9 @@ wordreverse
 examples/vector_basics
 examples/vector_custom_objects
 examples/vector_advanced
+examples/list_basics
+examples/list_lru_cache
+examples/list_priority_task_manager
 
 # Test directory binaries
 tests/test_addition

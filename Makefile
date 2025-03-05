@@ -33,7 +33,8 @@ CXX_TEST_SRCS = $(TESTS_DIR)/test_shared_ptr_demo.cpp $(TESTS_DIR)/test_unique_p
 
 # List of all C++ example files
 CXX_EXAMPLE_SRCS = $(EXAMPLES_DIR)/vector_basics.cpp $(EXAMPLES_DIR)/vector_custom_objects.cpp \
-       $(EXAMPLES_DIR)/vector_advanced.cpp
+       $(EXAMPLES_DIR)/vector_advanced.cpp $(EXAMPLES_DIR)/list_basics.cpp \
+       $(EXAMPLES_DIR)/list_lru_cache.cpp $(EXAMPLES_DIR)/list_priority_task_manager.cpp
 
 # Generate executable names from source files (without extensions)
 C_EXECS = $(C_SRCS:.c=)
