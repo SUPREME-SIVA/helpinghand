@@ -49,6 +49,24 @@ switch_init_example
 unique_ptr_demo
 vector_capacity_demo
 weather_observer
+wordreverse
+
+# Examples directory binaries
+examples/vector_basics
+examples/vector_custom_objects
+examples/vector_advanced
+
+# Test directory binaries
+tests/test_addition
+tests/test_array_rotation
+tests/test_bit_flip
+tests/test_palindrome
+tests/test_shared_ptr_demo
+tests/test_string_reverse
+tests/test_unique_ptr_demo
+tests/test_logger_singleton
+tests/test_vector_capacity_demo
+tests/test_weather_observer
 
 # Debug symbol files
 *.dSYM/
