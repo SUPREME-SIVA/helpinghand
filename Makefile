@@ -37,9 +37,20 @@ CXX_EXAMPLE_SRCS = $(EXAMPLES_DIR)/vector_basics.cpp $(EXAMPLES_DIR)/vector_cust
        $(EXAMPLES_DIR)/vector_advanced.cpp $(EXAMPLES_DIR)/list_basics.cpp \
        $(EXAMPLES_DIR)/list_lru_cache.cpp $(EXAMPLES_DIR)/list_priority_task_manager.cpp
 
+# List of all filesystem example files
+FILESYSTEM_SRCS = $(wildcard filesystem/*.cpp)
+
 # List of all C++ design pattern files
 CXX_DESIGN_PATTERN_SRCS = $(DESIGN_PATTERNS_DIR)/thread_safe_singleton.cpp \
        $(DESIGN_PATTERNS_DIR)/singleton_interview_guide.cpp
+
+# List of all interview question files
+INTERVIEW_QUESTIONS_DIR = interview_questions
+C_INTERVIEW_QUESTION_SRCS = $(INTERVIEW_QUESTIONS_DIR)/substring_search.c \
+       $(INTERVIEW_QUESTIONS_DIR)/bit_counting.c
+CXX_INTERVIEW_QUESTION_SRCS = $(INTERVIEW_QUESTIONS_DIR)/substring_search.cpp \
+       $(INTERVIEW_QUESTIONS_DIR)/bit_counting.cpp \
+       $(INTERVIEW_QUESTIONS_DIR)/array_sorting.cpp
 
 # Generate executable names from source files (without extensions)
 C_EXECS = $(C_SRCS:.c=)
@@ -56,9 +67,13 @@ ALL_CXX_TEST_EXECS = $(addprefix $(TESTS_DIR)/, $(CXX_TEST_EXECS))
 ALL_TEST_EXECS = $(ALL_C_TEST_EXECS) $(ALL_CXX_TEST_EXECS)
 ALL_CXX_EXAMPLE_EXECS = $(addprefix $(EXAMPLES_DIR)/, $(CXX_EXAMPLE_EXECS))
 ALL_CXX_DESIGN_PATTERN_EXECS = $(addprefix $(DESIGN_PATTERNS_DIR)/, $(CXX_DESIGN_PATTERN_EXECS))
+FILESYSTEM_EXECS = $(FILESYSTEM_SRCS:.cpp=)
+C_INTERVIEW_QUESTION_EXECS = $(C_INTERVIEW_QUESTION_SRCS:.c=)
+CXX_INTERVIEW_QUESTION_EXECS = $(CXX_INTERVIEW_QUESTION_SRCS:.cpp=)
+ALL_INTERVIEW_QUESTION_EXECS = $(C_INTERVIEW_QUESTION_EXECS) $(CXX_INTERVIEW_QUESTION_EXECS)
 
 # Default target to build all executables
-all: c-execs cxx-execs examples design-patterns
+all: c-execs cxx-execs examples design-patterns filesystem interview-questions
 
 # Build all C executables
 c-execs: $(C_EXECS)
@@ -74,6 +89,9 @@ cxx-examples: $(ALL_CXX_EXAMPLE_EXECS)
 
 # Build all design pattern executables
 design-patterns: $(ALL_CXX_DESIGN_PATTERN_EXECS)
+
+# Build all filesystem executables
+filesystem: $(FILESYSTEM_EXECS)
 
 # Build all test executables
 tests: c-tests cxx-tests
@@ -170,6 +188,16 @@ run-design-patterns: design-patterns
 	done
 	@echo "All design patterns completed"
 
+# Run all filesystem examples
+run-filesystem: filesystem
+	@echo "Running all filesystem examples..."
+	@for fs_example in $(FILESYSTEM_EXECS); do \
+		echo "=== Running $$fs_example ==="; \
+		./$$fs_example; \
+		echo ""; \
+	done
+	@echo "All filesystem examples completed"
+
 # Run a specific test
 run-test-%: $(TESTS_DIR)/%
 	@echo "Running test $*..."
@@ -185,6 +213,55 @@ run-design-pattern-%: $(DESIGN_PATTERNS_DIR)/%
 	@echo "Running design pattern $*..."
 	@$(DESIGN_PATTERNS_DIR)/$*
 
+# Build all interview question executables
+interview-questions: c-interview-questions cxx-interview-questions
+
+# Build all C interview question executables
+c-interview-questions: $(C_INTERVIEW_QUESTION_EXECS)
+
+# Build all C++ interview question executables
+cxx-interview-questions: $(CXX_INTERVIEW_QUESTION_EXECS)
+
+# Run all interview question executables
+run-interview-questions: interview-questions
+	@echo "Running all interview questions..."
+	@for question in $(ALL_INTERVIEW_QUESTION_EXECS); do \
+		echo "=== Running $$question ==="; \
+		./$$question; \
+		echo ""; \
+	done
+	@echo "All interview questions completed"
+
+# Run all C interview question executables
+run-c-interview-questions: c-interview-questions
+	@echo "Running C interview questions..."
+	@for question in $(C_INTERVIEW_QUESTION_EXECS); do \
+		echo "=== Running $$question ==="; \
+		./$$question; \
+		echo ""; \
+	done
+	@echo "All C interview questions completed"
+
+# Run all C++ interview question executables
+run-cxx-interview-questions: cxx-interview-questions
+	@echo "Running C++ interview questions..."
+	@for question in $(CXX_INTERVIEW_QUESTION_EXECS); do \
+		echo "=== Running $$question ==="; \
+		./$$question; \
+		echo ""; \
+	done
+	@echo "All C++ interview questions completed"
+
+# Run a specific interview question
+run-interview-question-%: $(INTERVIEW_QUESTIONS_DIR)/%
+	@echo "Running interview question $*..."
+	@$(INTERVIEW_QUESTIONS_DIR)/$*
+
+# Run a specific filesystem example
+run-filesystem-%: filesystem/%
+	@echo "Running filesystem example $*..."
+	@filesystem/$*
+
 # Run a specific program
 run-%: %
 	@echo "Running $*..."
@@ -197,6 +274,7 @@ clean:
 	@rm -f $(ALL_TEST_EXECS)
 	@rm -f $(ALL_CXX_EXAMPLE_EXECS)
 	@rm -f $(ALL_CXX_DESIGN_PATTERN_EXECS)
+	@rm -f $(FILESYSTEM_EXECS)
 	@rm -f $(BIN_DIR)/*
 	@echo "Clean complete"
 
@@ -243,6 +321,14 @@ install: all $(BIN_DIR)
 			echo "  - Skipped: $$exec (not found)"; \
 		fi; \
 	done
+	@for exec in $(FILESYSTEM_EXECS); do \
+		if [ -f $$exec ]; then \
+			cp $$exec $(BIN_DIR)/$$exec 2>/dev/null || true; \
+			echo "  - Copied: $$exec"; \
+		else \
+			echo "  - Skipped: $$exec (not found)"; \
+		fi; \
+	done
 	@echo "All executables copied to $(BIN_DIR)"
 	@ls -la $(BIN_DIR)
 
@@ -250,10 +336,12 @@ install: all $(BIN_DIR)
 help:
 	@echo "====== HelpingHand C/C++ Project Makefile ======"
 	@echo "Available targets:"
-	@echo "  all           - Build all executables (C, C++, and examples)"
+	@echo "  all           - Build all executables (C, C++, examples, design patterns, and filesystem)"
 	@echo "  c-execs       - Build only C executables"
 	@echo "  cxx-execs     - Build only C++ executables"
 	@echo "  examples      - Build all example executables"
+	@echo "  design-patterns - Build all design pattern executables"
+	@echo "  filesystem    - Build all filesystem examples"
 	@echo "  tests         - Build all test executables (C and C++)"
 	@echo "  c-tests       - Build only C test executables"
 	@echo "  cxx-tests     - Build only C++ test executables"
@@ -262,9 +350,11 @@ help:
 	@echo "  run-cxx-tests - Build and run C++ tests"
 	@echo "  run-examples  - Build and run all examples"
 	@echo "  run-design-patterns - Build and run all design patterns"
+	@echo "  run-filesystem - Build and run all filesystem examples"
 	@echo "  run-test-NAME - Build and run a specific test (e.g., make run-test-test_palindrome)"
 	@echo "  run-example-NAME - Build and run a specific example (e.g., make run-example-vector_basics)"
 	@echo "  run-design-pattern-NAME - Build and run a specific design pattern (e.g., make run-design-pattern-thread_safe_singleton)"
+	@echo "  run-filesystem-NAME - Build and run a specific filesystem example (e.g., make run-filesystem-basic_operations)"
 	@echo "  clean         - Remove all executables"
 	@echo "  run-PROGRAM   - Build and run a specific program (e.g., make run-addition)"
 	@echo "  install       - Copy all executables to $(BIN_DIR) directory"
