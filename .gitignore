@@ -63,6 +63,18 @@ examples/list_priority_task_manager
 design_patterns/thread_safe_singleton
 design_patterns/singleton_interview_guide
 
+# Filesystem directory binaries
+filesystem/basic_operations
+filesystem/directory_iterator
+filesystem/disk_usage_analyzer
+filesystem/file_backup_system
+filesystem/file_watcher
+
+# Interview questions directory binaries
+interview_questions/array_sorting
+interview_questions/bit_counting
+interview_questions/substring_search
+
 # Test directory binaries
 tests/test_addition
 tests/test_array_rotation

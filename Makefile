@@ -52,6 +52,11 @@ CXX_INTERVIEW_QUESTION_SRCS = $(INTERVIEW_QUESTIONS_DIR)/substring_search.cpp \
        $(INTERVIEW_QUESTIONS_DIR)/bit_counting.cpp \
        $(INTERVIEW_QUESTIONS_DIR)/array_sorting.cpp
 
+# List of all linked list implementations
+LINKED_LISTS_DIR = linked_lists
+C_LINKED_LISTS_SRCS = $(LINKED_LISTS_DIR)/singly_linked_list.c
+CXX_LINKED_LISTS_SRCS = $(LINKED_LISTS_DIR)/singly_linked_list.cpp
+
 # Generate executable names from source files (without extensions)
 C_EXECS = $(C_SRCS:.c=)
 CXX_EXECS = $(CXX_SRCS:.cpp=)
@@ -71,9 +76,12 @@ FILESYSTEM_EXECS = $(FILESYSTEM_SRCS:.cpp=)
 C_INTERVIEW_QUESTION_EXECS = $(C_INTERVIEW_QUESTION_SRCS:.c=)
 CXX_INTERVIEW_QUESTION_EXECS = $(CXX_INTERVIEW_QUESTION_SRCS:.cpp=)
 ALL_INTERVIEW_QUESTION_EXECS = $(C_INTERVIEW_QUESTION_EXECS) $(CXX_INTERVIEW_QUESTION_EXECS)
+C_LINKED_LISTS_EXECS = $(C_LINKED_LISTS_SRCS:.c=)
+CXX_LINKED_LISTS_EXECS = $(CXX_LINKED_LISTS_SRCS:.cpp=)
+ALL_LINKED_LISTS_EXECS = $(C_LINKED_LISTS_EXECS) $(CXX_LINKED_LISTS_EXECS)
 
 # Default target to build all executables
-all: c-execs cxx-execs examples design-patterns filesystem interview-questions
+all: c-execs cxx-execs examples design-patterns filesystem interview-questions linked-lists
 
 # Build all C executables
 c-execs: $(C_EXECS)
@@ -222,6 +230,15 @@ c-interview-questions: $(C_INTERVIEW_QUESTION_EXECS)
 # Build all C++ interview question executables
 cxx-interview-questions: $(CXX_INTERVIEW_QUESTION_EXECS)
 
+# Build all linked list executables
+linked-lists: c-linked-lists cxx-linked-lists
+
+# Build all C linked list executables
+c-linked-lists: $(C_LINKED_LISTS_EXECS)
+
+# Build all C++ linked list executables
+cxx-linked-lists: $(CXX_LINKED_LISTS_EXECS)
+
 # Run all interview question executables
 run-interview-questions: interview-questions
 	@echo "Running all interview questions..."
@@ -261,6 +278,41 @@ run-interview-question-%: $(INTERVIEW_QUESTIONS_DIR)/%
 run-filesystem-%: filesystem/%
 	@echo "Running filesystem example $*..."
 	@filesystem/$*
+
+# Run all linked list executables
+run-linked-lists: linked-lists
+	@echo "Running all linked list implementations..."
+	@for impl in $(ALL_LINKED_LISTS_EXECS); do \
+		echo "=== Running $$impl ==="; \
+		./$$impl; \
+		echo ""; \
+	done
+	@echo "All linked list implementations completed"
+
+# Run all C linked list executables
+run-c-linked-lists: c-linked-lists
+	@echo "Running C linked list implementations..."
+	@for impl in $(C_LINKED_LISTS_EXECS); do \
+		echo "=== Running $$impl ==="; \
+		./$$impl; \
+		echo ""; \
+	done
+	@echo "All C linked list implementations completed"
+
+# Run all C++ linked list executables
+run-cxx-linked-lists: cxx-linked-lists
+	@echo "Running C++ linked list implementations..."
+	@for impl in $(CXX_LINKED_LISTS_EXECS); do \
+		echo "=== Running $$impl ==="; \
+		./$$impl; \
+		echo ""; \
+	done
+	@echo "All C++ linked list implementations completed"
+
+# Run a specific linked list implementation
+run-linked-list-%: linked_lists/%
+	@echo "Running linked list implementation $*..."
+	@linked_lists/$*
 
 # Run a specific program
 run-%: %
