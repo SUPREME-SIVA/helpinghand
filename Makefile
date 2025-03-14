@@ -9,10 +9,12 @@ BIN_DIR = bin
 TESTS_DIR = tests
 EXAMPLES_DIR = examples
 DESIGN_PATTERNS_DIR = design_patterns
+BIT_MANIPULATION_DIR = bit_manipulation
 
 # List of all C source files
 C_SRCS = addition.c Palindrome.c StringRevers.c array_rotation.c bit_flip.c \
-       memory_example.c processor_simulation.c simple_array_rotation.c swap_even_numbers.c test.c
+       memory_example.c processor_simulation.c simple_array_rotation.c swap_even_numbers.c test.c \
+       $(BIT_MANIPULATION_DIR)/binary_print_and_swap.c
 
 # List of all C++ source files
 CXX_SRCS = advanced_solid_example.cpp array_rotation.cpp casting_examples.cpp constexpr_optimization.cpp \
@@ -21,7 +23,8 @@ CXX_SRCS = advanced_solid_example.cpp array_rotation.cpp casting_examples.cpp co
        non_virtual_access.cpp optimized_derived_access.cpp packet_handler_example.cpp parallel_sum_improved.cpp \
        payment_factory.cpp shared_ptr_demo.cpp simple_memory_manager.cpp solid_notification_example.cpp \
        solid_payment_example.cpp stock_observer.cpp structured_bindings_example.cpp switch_init_example.cpp \
-       unique_ptr_demo.cpp vector_capacity_demo.cpp weather_observer.cpp
+       unique_ptr_demo.cpp vector_capacity_demo.cpp weather_observer.cpp \
+       $(BIT_MANIPULATION_DIR)/binary_print_and_swap.cpp
 
 # List of all C test files
 C_TEST_SRCS = $(TESTS_DIR)/test_palindrome.c $(TESTS_DIR)/test_string_reverse.c \
@@ -79,9 +82,10 @@ ALL_INTERVIEW_QUESTION_EXECS = $(C_INTERVIEW_QUESTION_EXECS) $(CXX_INTERVIEW_QUE
 C_LINKED_LISTS_EXECS = $(C_LINKED_LISTS_SRCS:.c=)
 CXX_LINKED_LISTS_EXECS = $(CXX_LINKED_LISTS_SRCS:.cpp=)
 ALL_LINKED_LISTS_EXECS = $(C_LINKED_LISTS_EXECS) $(CXX_LINKED_LISTS_EXECS)
+BIT_MANIPULATION_EXECS = $(BIT_MANIPULATION_DIR)/binary_print_and_swap
 
 # Default target to build all executables
-all: c-execs cxx-execs examples design-patterns filesystem interview-questions linked-lists
+all: c-execs cxx-execs examples design-patterns filesystem interview-questions linked-lists bit-manipulation
 
 # Build all C executables
 c-execs: $(C_EXECS)
@@ -109,6 +113,27 @@ c-tests: $(ALL_C_TEST_EXECS)
 
 # Build all C++ test executables
 cxx-tests: $(ALL_CXX_TEST_EXECS)
+
+# Build all interview question executables
+interview-questions: c-interview-questions cxx-interview-questions
+
+# Build all C interview question executables
+c-interview-questions: $(C_INTERVIEW_QUESTION_EXECS)
+
+# Build all C++ interview question executables
+cxx-interview-questions: $(CXX_INTERVIEW_QUESTION_EXECS)
+
+# Build all linked list implementations
+linked-lists: c-linked-lists cxx-linked-lists
+
+# Build all C linked list implementations
+c-linked-lists: $(C_LINKED_LISTS_EXECS)
+
+# Build all C++ linked list implementations
+cxx-linked-lists: $(CXX_LINKED_LISTS_EXECS)
+
+# Build all bit manipulation implementations
+bit-manipulation: $(BIT_MANIPULATION_EXECS)
 
 # Generic rule for building C executables
 %: %.c
@@ -221,24 +246,6 @@ run-design-pattern-%: $(DESIGN_PATTERNS_DIR)/%
 	@echo "Running design pattern $*..."
 	@$(DESIGN_PATTERNS_DIR)/$*
 
-# Build all interview question executables
-interview-questions: c-interview-questions cxx-interview-questions
-
-# Build all C interview question executables
-c-interview-questions: $(C_INTERVIEW_QUESTION_EXECS)
-
-# Build all C++ interview question executables
-cxx-interview-questions: $(CXX_INTERVIEW_QUESTION_EXECS)
-
-# Build all linked list executables
-linked-lists: c-linked-lists cxx-linked-lists
-
-# Build all C linked list executables
-c-linked-lists: $(C_LINKED_LISTS_EXECS)
-
-# Build all C++ linked list executables
-cxx-linked-lists: $(CXX_LINKED_LISTS_EXECS)
-
 # Run all interview question executables
 run-interview-questions: interview-questions
 	@echo "Running all interview questions..."
@@ -279,7 +286,7 @@ run-filesystem-%: filesystem/%
 	@echo "Running filesystem example $*..."
 	@filesystem/$*
 
-# Run all linked list executables
+# Run all linked list implementations
 run-linked-lists: linked-lists
 	@echo "Running all linked list implementations..."
 	@for impl in $(ALL_LINKED_LISTS_EXECS); do \
@@ -289,7 +296,7 @@ run-linked-lists: linked-lists
 	done
 	@echo "All linked list implementations completed"
 
-# Run all C linked list executables
+# Run all C linked list implementations
 run-c-linked-lists: c-linked-lists
 	@echo "Running C linked list implementations..."
 	@for impl in $(C_LINKED_LISTS_EXECS); do \
@@ -299,7 +306,7 @@ run-c-linked-lists: c-linked-lists
 	done
 	@echo "All C linked list implementations completed"
 
-# Run all C++ linked list executables
+# Run all C++ linked list implementations
 run-cxx-linked-lists: cxx-linked-lists
 	@echo "Running C++ linked list implementations..."
 	@for impl in $(CXX_LINKED_LISTS_EXECS); do \
@@ -309,10 +316,27 @@ run-cxx-linked-lists: cxx-linked-lists
 	done
 	@echo "All C++ linked list implementations completed"
 
-# Run a specific linked list implementation
-run-linked-list-%: linked_lists/%
-	@echo "Running linked list implementation $*..."
-	@linked_lists/$*
+# Run all bit manipulation implementations
+run-bit-manipulation: bit-manipulation
+	@echo "Running all bit manipulation implementations..."
+	@for impl in $(BIT_MANIPULATION_EXECS); do \
+		echo "=== Running $$impl ==="; \
+		./$$impl; \
+		echo ""; \
+	done
+	@echo "All bit manipulation implementations completed"
+
+# Run a specific bit manipulation implementation
+run-bit-manipulation-%: $(BIT_MANIPULATION_DIR)/%
+	@echo "Running bit manipulation implementation: $*"
+	@if [ -f "$(BIT_MANIPULATION_DIR)/$*.c" ] && [ -x "$(BIT_MANIPULATION_DIR)/$*" ]; then \
+		./$(BIT_MANIPULATION_DIR)/$*; \
+	elif [ -f "$(BIT_MANIPULATION_DIR)/$*.cpp" ] && [ -x "$(BIT_MANIPULATION_DIR)/$*" ]; then \
+		./$(BIT_MANIPULATION_DIR)/$*; \
+	else \
+		echo "Error: $* is not a valid bit manipulation implementation"; \
+		exit 1; \
+	fi
 
 # Run a specific program
 run-%: %
@@ -388,57 +412,27 @@ install: all $(BIN_DIR)
 help:
 	@echo "====== HelpingHand C/C++ Project Makefile ======"
 	@echo "Available targets:"
-	@echo "  all           - Build all executables (C, C++, examples, design patterns, and filesystem)"
-	@echo "  c-execs       - Build only C executables"
-	@echo "  cxx-execs     - Build only C++ executables"
-	@echo "  examples      - Build all example executables"
-	@echo "  design-patterns - Build all design pattern executables"
-	@echo "  filesystem    - Build all filesystem examples"
-	@echo "  tests         - Build all test executables (C and C++)"
-	@echo "  c-tests       - Build only C test executables"
-	@echo "  cxx-tests     - Build only C++ test executables"
-	@echo "  run-tests     - Build and run all tests"
-	@echo "  run-c-tests   - Build and run C tests"
-	@echo "  run-cxx-tests - Build and run C++ tests"
-	@echo "  run-examples  - Build and run all examples"
-	@echo "  run-design-patterns - Build and run all design patterns"
-	@echo "  run-filesystem - Build and run all filesystem examples"
-	@echo "  run-test-NAME - Build and run a specific test (e.g., make run-test-test_palindrome)"
-	@echo "  run-example-NAME - Build and run a specific example (e.g., make run-example-vector_basics)"
-	@echo "  run-design-pattern-NAME - Build and run a specific design pattern (e.g., make run-design-pattern-thread_safe_singleton)"
-	@echo "  run-filesystem-NAME - Build and run a specific filesystem example (e.g., make run-filesystem-basic_operations)"
-	@echo "  clean         - Remove all executables"
-	@echo "  run-PROGRAM   - Build and run a specific program (e.g., make run-addition)"
-	@echo "  install       - Copy all executables to $(BIN_DIR) directory"
-	@echo "  help          - Display this help message"
+	@echo "  all                   - Build all executables (C, C++, examples, design patterns, filesystem, interview questions, linked lists, and bit manipulation)"
+	@echo "  c-execs               - Build only C executables"
+	@echo "  cxx-execs             - Build only C++ executables"
+	@echo "  examples              - Build all example executables"
+	@echo "  design-patterns       - Build all design pattern executables"
+	@echo "  filesystem            - Build all filesystem executables"
+	@echo "  tests                 - Build all test executables"
+	@echo "  interview-questions   - Build all interview question executables"
+	@echo "  linked-lists          - Build all linked list implementations"
+	@echo "  bit-manipulation      - Build all bit manipulation implementations"
+	@echo "  run-tests             - Run all tests"
+	@echo "  run-c-tests           - Run all C tests"
+	@echo "  run-cxx-tests         - Run all C++ tests"
+	@echo "  run-examples          - Run all examples"
+	@echo "  run-design-patterns   - Run all design patterns"
+	@echo "  run-filesystem        - Run all filesystem examples"
+	@echo "  run-interview-questions - Run all interview questions"
+	@echo "  run-linked-lists      - Run all linked list implementations"
+	@echo "  run-bit-manipulation  - Run all bit manipulation implementations"
+	@echo "  run-bit-manipulation-NAME - Run a specific bit manipulation implementation"
+	@echo "  clean                 - Remove all executables"
+	@echo "  help                  - Display this help message"
 	@echo ""
-	@echo "C Executables ($(words $(C_EXECS))):"
-	@for exec in $(C_EXECS); do \
-		echo "  $$exec"; \
-	done
-	@echo ""
-	@echo "C++ Executables ($(words $(CXX_EXECS))):"
-	@for exec in $(CXX_EXECS); do \
-		echo "  $$exec"; \
-	done
-	@echo ""
-	@echo "C Test Executables ($(words $(C_TEST_EXECS))):"
-	@for exec in $(C_TEST_EXECS); do \
-		echo "  $$exec"; \
-	done
-	@echo ""
-	@echo "C++ Test Executables ($(words $(CXX_TEST_EXECS))):"
-	@for exec in $(CXX_TEST_EXECS); do \
-		echo "  $$exec"; \
-	done
-	@echo ""
-	@echo "C++ Example Executables ($(words $(CXX_EXAMPLE_EXECS))):"
-	@for exec in $(CXX_EXAMPLE_EXECS); do \
-		echo "  $$exec"; \
-	done
-	@echo ""
-	@echo "C++ Design Pattern Executables ($(words $(CXX_DESIGN_PATTERN_EXECS))):"
-	@for exec in $(CXX_DESIGN_PATTERN_EXECS); do \
-		echo "  $$exec"; \
-	done
-	@echo "============================================="
+	@echo "For more information, see the README.md file."
