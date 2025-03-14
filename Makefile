@@ -10,6 +10,7 @@ TESTS_DIR = tests
 EXAMPLES_DIR = examples
 DESIGN_PATTERNS_DIR = design_patterns
 BIT_MANIPULATION_DIR = bit_manipulation
+MULTI_THREADING_DIR = multi_threading
 
 # List of all C source files
 C_SRCS = addition.c Palindrome.c StringRevers.c array_rotation.c bit_flip.c \
@@ -26,14 +27,22 @@ CXX_SRCS = advanced_solid_example.cpp array_rotation.cpp casting_examples.cpp co
        unique_ptr_demo.cpp vector_capacity_demo.cpp weather_observer.cpp \
        $(BIT_MANIPULATION_DIR)/binary_print_and_swap.cpp
 
+# List of all multi-threading source files
+MULTI_THREADING_C_SRCS = $(wildcard $(MULTI_THREADING_DIR)/*.c)
+MULTI_THREADING_CXX_SRCS = $(wildcard $(MULTI_THREADING_DIR)/*.cpp)
+MULTI_THREADING_C_EXECS = $(MULTI_THREADING_C_SRCS:.c=)
+MULTI_THREADING_CXX_EXECS = $(MULTI_THREADING_CXX_SRCS:.cpp=)
+MULTI_THREADING_EXECS = $(MULTI_THREADING_C_EXECS) $(MULTI_THREADING_CXX_EXECS)
+
 # List of all C test files
 C_TEST_SRCS = $(TESTS_DIR)/test_palindrome.c $(TESTS_DIR)/test_string_reverse.c \
-       $(TESTS_DIR)/test_array_rotation.c $(TESTS_DIR)/test_bit_flip.c $(TESTS_DIR)/test_addition.c
+       $(TESTS_DIR)/test_array_rotation.c $(TESTS_DIR)/test_bit_flip.c $(TESTS_DIR)/test_addition.c \
+       $(TESTS_DIR)/test_multi_threading.c
 
 # List of all C++ test files
 CXX_TEST_SRCS = $(TESTS_DIR)/test_shared_ptr_demo.cpp $(TESTS_DIR)/test_unique_ptr_demo.cpp \
        $(TESTS_DIR)/test_weather_observer.cpp $(TESTS_DIR)/test_vector_capacity_demo.cpp \
-       $(TESTS_DIR)/test_logger_singleton.cpp
+       $(TESTS_DIR)/test_logger_singleton.cpp $(TESTS_DIR)/test_multi_threading.cpp
 
 # List of all C++ example files
 CXX_EXAMPLE_SRCS = $(EXAMPLES_DIR)/vector_basics.cpp $(EXAMPLES_DIR)/vector_custom_objects.cpp \
@@ -69,7 +78,9 @@ CXX_EXAMPLE_EXECS = $(notdir $(CXX_EXAMPLE_SRCS:.cpp=))
 CXX_DESIGN_PATTERN_EXECS = $(notdir $(CXX_DESIGN_PATTERN_SRCS:.cpp=))
 
 # All executables
-ALL_EXECS = $(C_EXECS) $(CXX_EXECS)
+ALL_EXECS = $(C_EXECS) $(CXX_EXECS) $(MULTI_THREADING_EXECS)
+
+# All C test executables
 ALL_C_TEST_EXECS = $(addprefix $(TESTS_DIR)/, $(C_TEST_EXECS))
 ALL_CXX_TEST_EXECS = $(addprefix $(TESTS_DIR)/, $(CXX_TEST_EXECS))
 ALL_TEST_EXECS = $(ALL_C_TEST_EXECS) $(ALL_CXX_TEST_EXECS)
@@ -85,7 +96,7 @@ ALL_LINKED_LISTS_EXECS = $(C_LINKED_LISTS_EXECS) $(CXX_LINKED_LISTS_EXECS)
 BIT_MANIPULATION_EXECS = $(BIT_MANIPULATION_DIR)/binary_print_and_swap
 
 # Default target to build all executables
-all: c-execs cxx-execs examples design-patterns filesystem interview-questions linked-lists bit-manipulation
+all: c-execs cxx-execs examples design-patterns filesystem interview-questions linked-lists bit-manipulation multi-threading
 
 # Build all C executables
 c-execs: $(C_EXECS)
@@ -135,6 +146,15 @@ cxx-linked-lists: $(CXX_LINKED_LISTS_EXECS)
 # Build all bit manipulation implementations
 bit-manipulation: $(BIT_MANIPULATION_EXECS)
 
+# Build multi-threading implementations
+multi-threading: $(MULTI_THREADING_EXECS)
+
+# Build C multi-threading implementations
+multi-threading-c: $(MULTI_THREADING_C_EXECS)
+
+# Build C++ multi-threading implementations
+multi-threading-cpp: $(MULTI_THREADING_CXX_EXECS)
+
 # Generic rule for building C executables
 %: %.c
 	@echo "Building C program: $@..."
@@ -170,6 +190,18 @@ $(DESIGN_PATTERNS_DIR)/%: $(DESIGN_PATTERNS_DIR)/%.cpp
 	@echo "Building C++ design pattern: $@..."
 	@$(CXX) $(CXXFLAGS) -pthread -o $@ $< $(LDFLAGS)
 	@echo "Done building $@"
+
+# Compile C multi-threading implementations
+$(MULTI_THREADING_DIR)/%: $(MULTI_THREADING_DIR)/%.c
+	@echo "Compiling $<..."
+	@$(CC) $(CFLAGS) -pthread -o $@ $< $(LDFLAGS)
+	@echo "Compilation complete: $@"
+
+# Compile C++ multi-threading implementations
+$(MULTI_THREADING_DIR)/%: $(MULTI_THREADING_DIR)/%.cpp
+	@echo "Compiling $<..."
+	@$(CXX) $(CXXFLAGS) -pthread -o $@ $< $(LDFLAGS)
+	@echo "Compilation complete: $@"
 
 # Run all tests
 run-tests: tests
@@ -326,17 +358,53 @@ run-bit-manipulation: bit-manipulation
 	done
 	@echo "All bit manipulation implementations completed"
 
-# Run a specific bit manipulation implementation
-run-bit-manipulation-%: $(BIT_MANIPULATION_DIR)/%
-	@echo "Running bit manipulation implementation: $*"
-	@if [ -f "$(BIT_MANIPULATION_DIR)/$*.c" ] && [ -x "$(BIT_MANIPULATION_DIR)/$*" ]; then \
-		./$(BIT_MANIPULATION_DIR)/$*; \
-	elif [ -f "$(BIT_MANIPULATION_DIR)/$*.cpp" ] && [ -x "$(BIT_MANIPULATION_DIR)/$*" ]; then \
-		./$(BIT_MANIPULATION_DIR)/$*; \
-	else \
-		echo "Error: $* is not a valid bit manipulation implementation"; \
-		exit 1; \
-	fi
+# Run all multi-threading implementations
+run-multi-threading: multi-threading
+	@echo "Running all multi-threading implementations..."
+	@for exec in $(MULTI_THREADING_EXECS); do \
+		echo ""; \
+		echo "=== Running $$exec ==="; \
+		$$exec; \
+	done
+	@echo "All multi-threading implementations completed"
+
+# Run C multi-threading implementations
+run-multi-threading-c: multi-threading-c
+	@echo "Running C multi-threading implementations..."
+	@for exec in $(MULTI_THREADING_C_EXECS); do \
+		echo ""; \
+		echo "=== Running $$exec ==="; \
+		$$exec; \
+	done
+	@echo "All C multi-threading implementations completed"
+
+# Run C++ multi-threading implementations
+run-multi-threading-cpp: multi-threading-cpp
+	@echo "Running C++ multi-threading implementations..."
+	@for exec in $(MULTI_THREADING_CXX_EXECS); do \
+		echo ""; \
+		echo "=== Running $$exec ==="; \
+		$$exec; \
+	done
+	@echo "All C++ multi-threading implementations completed"
+
+# Run specific multi-threading implementation
+run-multi-threading-%: $(MULTI_THREADING_DIR)/%
+	@echo "Running multi-threading implementation: $<..."
+	@./$<
+	@echo "Multi-threading implementation completed"
+
+# Run all multi-threading tests
+run-multi-threading-tests: tests
+	@echo "Running multi-threading tests..."
+	@echo "=== Running C multi-threading tests ==="
+	@$(TESTS_DIR)/test_multi_threading
+	@echo ""
+	@echo "=== Running C++ multi-threading tests ==="
+	@$(CXX) $(CXXFLAGS) -pthread -o $(TESTS_DIR)/test_multi_threading_cpp $(TESTS_DIR)/test_multi_threading.cpp $(LDFLAGS)
+	@$(TESTS_DIR)/test_multi_threading_cpp
+	@echo ""
+	@echo "All multi-threading tests completed"
 
 # Run a specific program
 run-%: %
@@ -412,7 +480,7 @@ install: all $(BIN_DIR)
 help:
 	@echo "====== HelpingHand C/C++ Project Makefile ======"
 	@echo "Available targets:"
-	@echo "  all                   - Build all executables (C, C++, examples, design patterns, filesystem, interview questions, linked lists, and bit manipulation)"
+	@echo "  all                   - Build all executables (C, C++, examples, design patterns, filesystem, interview questions, linked lists, bit manipulation, and multi-threading)"
 	@echo "  c-execs               - Build only C executables"
 	@echo "  cxx-execs             - Build only C++ executables"
 	@echo "  examples              - Build all example executables"
@@ -421,7 +489,10 @@ help:
 	@echo "  tests                 - Build all test executables"
 	@echo "  interview-questions   - Build all interview question executables"
 	@echo "  linked-lists          - Build all linked list implementations"
-	@echo "  bit-manipulation      - Build all bit manipulation implementations"
+	@echo "  bit-manipulation      - Build bit manipulation implementations"
+	@echo "  multi-threading       - Build multi-threading implementations"
+	@echo "  c-multi-threading     - Build C multi-threading implementations"
+	@echo "  cxx-multi-threading   - Build C++ multi-threading implementations"
 	@echo "  run-tests             - Run all tests"
 	@echo "  run-c-tests           - Run all C tests"
 	@echo "  run-cxx-tests         - Run all C++ tests"
@@ -430,8 +501,10 @@ help:
 	@echo "  run-filesystem        - Run all filesystem examples"
 	@echo "  run-interview-questions - Run all interview questions"
 	@echo "  run-linked-lists      - Run all linked list implementations"
-	@echo "  run-bit-manipulation  - Run all bit manipulation implementations"
-	@echo "  run-bit-manipulation-NAME - Run a specific bit manipulation implementation"
+	@echo "  run-bit-manipulation  - Run bit manipulation implementations"
+	@echo "  run-multi-threading   - Run all multi-threading implementations"
+	@echo "  run-multi-threading-X - Run specific multi-threading implementation (e.g., run-multi-threading-basic_threading)"
+	@echo "  run-multi-threading-tests - Run all multi-threading tests"
 	@echo "  clean                 - Remove all executables"
 	@echo "  help                  - Display this help message"
 	@echo ""
