@@ -1,0 +1,20 @@
+# Ignore compiled binaries
+cpp14_features
+
+# Ignore object files
+*.o
+*.obj
+
+# Ignore build directories
+build/
+bin/
+
+# Ignore IDE and editor files
+.vscode/
+.idea/
+*.swp
+*~
+
+# Ignore OS specific files
+.DS_Store
+Thumbs.db
