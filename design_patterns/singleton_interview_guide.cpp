@@ -251,7 +251,7 @@ int main() {
     });
     
     std::thread t2([]() {
-        std::cout << "Thread 2: " << &Singleton::getInstance() << std::endl;
+        std::cout << " Thread 2: " << &Singleton::getInstance() << std::endl;
         Singleton::getInstance().doSomething();
     });
     
