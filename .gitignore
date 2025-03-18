@@ -51,6 +51,33 @@ vector_capacity_demo
 weather_observer
 wordreverse
 
+# C++11, C++14, C++17 binaries
+C++11/cpp11_basic_features
+C++11/cpp11_features
+C++11/cpp11_features_fixed
+C++14/cpp14_basic_features
+C++14/cpp14_features
+C++14/cpp14_intermediate_features
+C++17/cpp17_advanced_features
+C++17/cpp17_basic_features
+C++17/cpp17_intermediate_features
+
+# Bit manipulation binaries
+bit_manipulation/binary_print_and_swap
+
+# Multi-threading binaries
+multi_threading/basic_processing
+multi_threading/basic_threading
+multi_threading/deadlock_example
+multi_threading/multithreading_interview_guide
+multi_threading/cpp_threading_interview_guide
+
+# Processes binaries
+processes/processes_interview_guide
+
+# Linked lists binaries
+linked_lists/singly_linked_list
+
 # Examples directory binaries
 examples/vector_basics
 examples/vector_custom_objects
@@ -62,6 +89,8 @@ examples/list_priority_task_manager
 # Design patterns directory binaries
 design_patterns/thread_safe_singleton
 design_patterns/singleton_interview_guide
+design_patterns/factory_pattern_interview_guide
+design_patterns/thread_safe_factory
 
 # Filesystem directory binaries
 filesystem/basic_operations
