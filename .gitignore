@@ -116,6 +116,9 @@ tests/test_logger_singleton
 tests/test_vector_capacity_demo
 tests/test_weather_observer
 
+# Data analysis binaries
+data_analysis/time_series_analyzer
+
 # Debug symbol files
 *.dSYM/
 *.pdb
