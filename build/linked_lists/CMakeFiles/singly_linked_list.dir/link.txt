@@ -1,0 +1,2 @@
+/usr/bin/ar qc libsingly_linked_list.a CMakeFiles/singly_linked_list.dir/singly_linked_list_recursive.cpp.o
+/usr/bin/ranlib libsingly_linked_list.a

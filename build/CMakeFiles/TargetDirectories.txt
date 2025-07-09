@@ -1,0 +1,6 @@
+/Users/macbook/helpinghand/helpinghand/build/CMakeFiles/edit_cache.dir
+/Users/macbook/helpinghand/helpinghand/build/CMakeFiles/rebuild_cache.dir
+/Users/macbook/helpinghand/helpinghand/build/linked_lists/CMakeFiles/singly_linked_list.dir
+/Users/macbook/helpinghand/helpinghand/build/linked_lists/CMakeFiles/test_linked_list.dir
+/Users/macbook/helpinghand/helpinghand/build/linked_lists/CMakeFiles/edit_cache.dir
+/Users/macbook/helpinghand/helpinghand/build/linked_lists/CMakeFiles/rebuild_cache.dir

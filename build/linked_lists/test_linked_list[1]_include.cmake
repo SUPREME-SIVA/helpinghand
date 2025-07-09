@@ -1,0 +1,5 @@
+if(EXISTS "/Users/macbook/helpinghand/helpinghand/build/linked_lists/test_linked_list[1]_tests.cmake")
+  include("/Users/macbook/helpinghand/helpinghand/build/linked_lists/test_linked_list[1]_tests.cmake")
+else()
+  add_test(test_linked_list_NOT_BUILT test_linked_list_NOT_BUILT)
+endif()

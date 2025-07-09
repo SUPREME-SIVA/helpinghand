@@ -1,0 +1,70 @@
+<cpq_package version="2.0.1.0">
+<filename>cp037722.exe</filename>
+<divisions>
+<division key="68">
+<division_xlate lang="en">ServerOptions</division_xlate>
+<division_xlate lang="cn">服务器选项</division_xlate>
+<division_xlate lang="ja">サーバ オプション</division_xlate>
+<division_xlate lang="ko">서버 옵션</division_xlate>
+<division_xlate lang="tw">ServerOptions</division_xlate>
+</division>
+<division key="6">
+<division_xlate lang="en">Server</division_xlate>
+<division_xlate lang="cn">服务器</division_xlate>
+<division_xlate lang="ja">サーバ</division_xlate>
+<division_xlate lang="ko">서버</division_xlate>
+<division_xlate lang="tw">伺服器</division_xlate>
+</division>
+</divisions>
+<operating_systems>
+<operating_system key="">
+<operating_system_xlate>Microsoft Windows Server 2012 R2</operating_system_xlate>
+</operating_system>
+<operating_system key="">
+<operating_system_xlate>Microsoft Windows Server 2016</operating_system_xlate>
+</operating_system>
+<operating_system key="">
+<operating_system_xlate>Microsoft Windows Server 2019</operating_system_xlate>
+</operating_system>
+</operating_systems>
+<products>
+<product rom="I41"/>
+<product rom="U34"/>
+<product rom="U30"/>
+<product rom="U32"/>
+</products>
+<name>
+<name_xlate lang="en">Online Flash Component for Windows x64 - Gen10 NVMe Backplane PIC Firmware</name_xlate>
+<name_xlate lang="ja">オンラインフラッシュコンポーネントfor Windows x64 - Gen10 NVMeバックプレーンPICファームウェア</name_xlate>
+</name>
+<manufacturer_name>
+<manufacturer_name_xlate lang="en">Hewlett Packard Enterprise</manufacturer_name_xlate>
+<manufacturer_name_xlate lang="ja">Hewlett Packard Enterprise</manufacturer_name_xlate>
+</manufacturer_name>
+<version value="1.20" revision="D" type_of_change="0"/>
+<release_date year="2018" month="10" day="27" hour="8" minute="48" second="40"/>
+<description>
+<description_xlate lang="en">
+<![CDATA[ This component updates the firmware on ProLiant Gen10 NVMe storage backplanes. ]]>
+</description_xlate>
+<description_xlate lang="ja">
+<![CDATA[ このコンポーネントは、ProLiant Gen10 NVMe ストレージバックプレーンをアップデートします。 ]]>
+</description_xlate>
+</description>
+<payload>
+<Devices>
+<Device>
+<DeviceName>NVMe Backplane PIC</DeviceName>
+<FirmwareImages>
+<FileName>ISS_NVMe_BP_PIC_flashV1B20_signed.hex</FileName>
+<InstallDurationSec>120</InstallDurationSec>
+<ResetRequired>False</ResetRequired>
+<DirectFlashOk>False</DirectFlashOk>
+<UefiFlashable>False</UefiFlashable>
+</FirmwareImages>
+<Target>00000000-0000-0000-0000-000049535320</Target>
+<Version>1.20</Version>
+</Device>
+</Devices>
+</payload>
+</cpq_package>

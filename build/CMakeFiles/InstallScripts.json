@@ -1,0 +1,8 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/macbook/helpinghand/helpinghand/build/cmake_install.cmake",
+		"/Users/macbook/helpinghand/helpinghand/build/linked_lists/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

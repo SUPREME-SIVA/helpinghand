@@ -23,4 +23,32 @@ The code in this directory demonstrates efficient implementations of linked list
 
 ## Usage
 
+### Building and Running Tests
+
+To build and run the Google Test unit tests for the linked list implementations:
+
+1. Install Google Test:
+   ```bash
+   # For Ubuntu/Debian
+   sudo apt-get install googletest
+
+   # For macOS
+   brew install googletest
+   ```
+
+2. Build the tests:
+   ```bash
+   mkdir build
+   cd build
+   cmake ..
+   make
+   ```
+
+3. Run the tests:
+   ```bash
+   ./test_linked_list
+   ```
+
+### Building Examples
+
 Each implementation can be compiled using the Makefile in the root directory. See the main README.md for more details on building and running the examples.
